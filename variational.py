@@ -35,9 +35,9 @@ def vb_linear_fit(X, y, a0=1e-2, b0=1e-4, c0=1e-2, d0=1e-4):
     The underlying generative model assumes:
     p(y | x, w, tau) = N(y | w'x, tau^-1),
 
-   x and y -> rows of the given X and y.
-   w and tau ->  conjugate normal inverse-gamma prior
-   p(w, tau | alpha) = N(w | 0, (tau alpha)^-1 I) Gam(tau | a0, b0),
+    x and y -> rows of the given X and y.
+    w and tau ->  conjugate normal inverse-gamma prior
+    p(w, tau | alpha) = N(w | 0, (tau alpha)^-1 I) Gam(tau | a0, b0),
 
     with the hyper-prior
     p(alpha) = p(alpha | c0, d0).
@@ -55,9 +55,6 @@ def vb_linear_fit(X, y, a0=1e-2, b0=1e-4, c0=1e-2, d0=1e-4):
     Also, the mean E_a = E(alpha) is returned, together with the inverse of V,
     and its log determinant. L is the variational bound of the model, and is a
     lower bound on the log-model evidence ln p(y | X).
-
-    Copyright (c) 2013, 2014, Jan Drugowitsch
-    All rights reserved.
 
     :param X:
     :param y:
@@ -131,8 +128,10 @@ def vb_linear_fit(X, y, a0=1e-2, b0=1e-4, c0=1e-2, d0=1e-4):
 if __name__ == "__main__":
 
     X = np.hstack((np.ones((100, 1)), np.random.rand(100, 3)))
-    y = X.dot(np.array([1, 2, 3, 5]))
+    w_true = np.array([1.0, 2.0, 3.0, 5.0])
+    y = X.dot(w_true)
 
-    w, V, invV, logdetV, an, bn, E_a, L = vb_linear_fit(X, y)
+    w_est, V, invV, logdetV, an, bn, E_a, L = vb_linear_fit(X, y)
 
-    print(w)
+    np.set_printoptions(precision=3, suppress=True)
+    print('True w: {}, \nEst w: {}'.format(w_true, w_est))
